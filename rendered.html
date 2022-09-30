@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>DarkPan - Bootstrap 5 Admin Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet"/>
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+    <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/mapdata/countries/ru/custom/ru-all-disputed.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.6/proj4.js"></script>
+
+
+</head>
+
+<body>
+<div class="container-fluid position-relative d-flex p-0">
+    <!-- Spinner Start -->
+    <div id="spinner"
+         class="show bg-dark position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+
+    <!-- Content Start -->
+    <div class="content">
+
+
+        <!-- Sale & Revenue Start -->
+        <div class="container-fluid pt-4 px-4">
+            <div class="row g-4">
+                <div class="col-sm-4 col-xl-4">
+                    <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                        <i class="fa fa-skull fa-3x text-primary"></i>
+                        <div class="ms-3">
+                            <p class="mb-2">Мобилизованных погибнет:</p>
+                            <h6 class="mb-0">12 тысяч человек</h6>
+                            <!--                                                                <p class="mb-2">по прогнозу</p>-->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-xl-4">
+                    <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                        <i class="fa fa-plane fa-3x text-primary"></i>
+                        <div class="ms-3">
+                            <p class="mb-2">Уже уехало из России:</p>
+                            <h6 class="mb-0">250 тысяч человек</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-xl-4">
+                    <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                        <!--                            <i class="fa fa-down fa-3x text-primary"></i>-->
+                        <!--                            <i class="fa-solid fa-stapler"></i>-->
+                        <i class="fa fa-chart-simple"></i>
+                        <div class="ms-3">
+                            <p class="mb-2">Экономика упадёт:</p>
+
+                            <h6 class="mb-0"> на 14%</h6>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- Sale & Revenue End -->
+
+
+        <!-- Sales Chart Start -->
+        <div class="container-fluid pt-4 px-4">
+            <div class="row g-4">
+                <div class="col-sm-12 col-xl-12">
+                    <div class="bg-secondary text-center rounded p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h6 class="mb-0">Worldwide Sales</h6>
+                        </div>
+                        <!--                        <canvas id="worldwide-sales"></canvas>-->
+                        <div id="chart"></div>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+/* Highcharts plugin to handle text symbols */
+(function (H) {
+    function symbolWrap(proceed, symbol, x, y, w, h, options) {
+        if (symbol.indexOf('text:') === 0) {
+            var text = symbol.split(':')[1],
+                svgElem = this.text(text, x, y + h)
+                .css({
+                    fontFamily: 'FontAwesome',
+                    fontSize: h * 2
+                });
+
+            if (svgElem.renderer.isVML) {
+                svgElem.fillSetter = function (value, key, element) {
+                    element.style.color = H.Color(value).get('rgb');
+                };
+            }
+            return svgElem;
+        }
+        return proceed.apply(this, [].slice.call(arguments, 1));
+    }
+    H.wrap(H.SVGRenderer.prototype, 'symbol', symbolWrap);
+    if (H.VMLRenderer) {
+        H.wrap(H.VMLRenderer.prototype, 'symbol', symbolWrap);
+    }
+
+    // Load the font for SVG files also
+    H.wrap(H.Chart.prototype, 'getSVG', function (proceed) {
+        var svg = proceed.call(this);
+        svg = '<?xml-stylesheet type="text/css" ' +
+            'href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" ?>' +
+            svg;
+        return svg;
+    });
+}(Highcharts));
+
+
+                                Highcharts.theme = {
+                                    colors: ['#2b908f', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
+                                        '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'],
+                                    chart: {
+                                        backgroundColor: {
+                                            linearGradient: {x1: 0, y1: 0, x2: 1, y2: 1},
+                                            stops: [
+                                                [0, '#2a2a2b'],
+                                                [1, '#3e3e40']
+                                            ]
+                                        },
+                                        style: {
+                                            fontFamily: '\'Unica One\', sans-serif'
+                                        },
+                                        plotBorderColor: '#606063'
+                                    },
+                                    title: {
+                                        style: {
+                                            color: '#E0E0E3',
+                                            textTransform: 'uppercase',
+                                            fontSize: '20px'
+                                        }
+                                    },
+                                    subtitle: {
+                                        style: {
+                                            color: '#E0E0E3',
+                                            textTransform: 'uppercase'
+                                        }
+                                    },
+                                    xAxis: {
+                                        gridLineColor: '#707073',
+                                        labels: {
+                                            style: {
+                                                color: '#E0E0E3'
+                                            }
+                                        },
+                                        lineColor: '#707073',
+                                        minorGridLineColor: '#505053',
+                                        tickColor: '#707073',
+                                        title: {
+                                            style: {
+                                                color: '#A0A0A3'
+                                            }
+                                        }
+                                    },
+                                    yAxis: {
+                                        gridLineColor: '#707073',
+                                        labels: {
+                                            style: {
+                                                color: '#E0E0E3'
+                                            }
+                                        },
+                                        lineColor: '#707073',
+                                        minorGridLineColor: '#505053',
+                                        tickColor: '#707073',
+                                        tickWidth: 1,
+                                        title: {
+                                            style: {
+                                                color: '#A0A0A3'
+                                            }
+                                        }
+                                    },
+                                    tooltip: {
+                                        backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                                        style: {
+                                            color: '#F0F0F0'
+                                        }
+                                    },
+                                    plotOptions: {
+                                        series: {
+                                            dataLabels: {
+                                                color: '#F0F0F3',
+                                                style: {
+                                                    fontSize: '13px'
+                                                }
+                                            },
+                                            marker: {
+                                                lineColor: '#333'
+                                            }
+                                        },
+                                        boxplot: {
+                                            fillColor: '#505053'
+                                        },
+                                        candlestick: {
+                                            lineColor: 'white'
+                                        },
+                                        errorbar: {
+                                            color: 'white'
+                                        }
+                                    },
+                                    legend: {
+                                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                        itemStyle: {
+                                            color: '#E0E0E3'
+                                        },
+                                        itemHoverStyle: {
+                                            color: '#FFF'
+                                        },
+                                        itemHiddenStyle: {
+                                            color: '#606063'
+                                        },
+                                        title: {
+                                            style: {
+                                                color: '#C0C0C0'
+                                            }
+                                        }
+                                    },
+                                    credits: {
+                                        style: {
+                                            color: '#666'
+                                        }
+                                    },
+                                    labels: {
+                                        style: {
+                                            color: '#707073'
+                                        }
+                                    },
+                                    drilldown: {
+                                        activeAxisLabelStyle: {
+                                            color: '#F0F0F3'
+                                        },
+                                        activeDataLabelStyle: {
+                                            color: '#F0F0F3'
+                                        }
+                                    },
+                                    navigation: {
+                                        buttonOptions: {
+                                            symbolStroke: '#DDDDDD',
+                                            theme: {
+                                                fill: '#505053'
+                                            }
+                                        }
+                                    },
+                                    // scroll charts
+                                    rangeSelector: {
+                                        buttonTheme: {
+                                            fill: '#505053',
+                                            stroke: '#000000',
+                                            style: {
+                                                color: '#CCC'
+                                            },
+                                            states: {
+                                                hover: {
+                                                    fill: '#707073',
+                                                    stroke: '#000000',
+                                                    style: {
+                                                        color: 'white'
+                                                    }
+                                                },
+                                                select: {
+                                                    fill: '#000003',
+                                                    stroke: '#000000',
+                                                    style: {
+                                                        color: 'white'
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        inputBoxBorderColor: '#505053',
+                                        inputStyle: {
+                                            backgroundColor: '#333',
+                                            color: 'silver'
+                                        },
+                                        labelStyle: {
+                                            color: 'silver'
+                                        }
+                                    },
+                                    navigator: {
+                                        handles: {
+                                            backgroundColor: '#666',
+                                            borderColor: '#AAA'
+                                        },
+                                        outlineColor: '#CCC',
+                                        maskFill: 'rgba(255,255,255,0.1)',
+                                        series: {
+                                            color: '#7798BF',
+                                            lineColor: '#A6C7ED'
+                                        },
+                                        xAxis: {
+                                            gridLineColor: '#505053'
+                                        }
+                                    },
+                                    scrollbar: {
+                                        barBackgroundColor: '#808083',
+                                        barBorderColor: '#808083',
+                                        buttonArrowColor: '#CCC',
+                                        buttonBackgroundColor: '#606063',
+                                        buttonBorderColor: '#606063',
+                                        rifleColor: '#FFF',
+                                        trackBackgroundColor: '#404043',
+                                        trackBorderColor: '#404043'
+                                    }
+                                };
+
+                                Highcharts.setOptions(Highcharts.theme);
+                                Highcharts.mapChart('chart', {
+                                    "chart": {
+                                        "backgroundColor": "#191C24",
+                                        "height": 500,
+                                        "map": "countries/ru/custom/ru-all-disputed"
+                                    },
+                                    "colorAxis": {
+                                        "max": 0.05,
+                                        "min": 0.01,
+                                        "stops": [[0.1, "#6B1F20"], [0.25, "#8F1D1E"], [0.75, "#B41C1C"], [1, "#D91A1A"]],
+                                        "type": "logarithmic"
+                                    },
+                                    "mapNavigation": {"buttonOptions": {"verticalAlign": "bottom"}, "enabled": true},
+                                    "plotOptions": {
+                                        "map": {
+                                            "allAreas": true,
+                                            "dataLabels": {"enabled": true},
+                                            "joinBy": ["hc-key", "hc"],
+                                            "tooltip": {
+                                                "headerFormat": "",
+                                                "pointFormat": "{point.name_ru}:\u003cbr/\u003e\u003cb\u003e{point.display_value:.1f}{point.display_suffix} {point.unit}\u003c/b\u003e"
+                                            }
+                                        }
+                                    },
+                                    "series": [{
+                                        "borderColor": "#707073",
+                                        "data": [{
+                                            "color": null,
+                                            "dataLabels": null,
+                                            "display_suffix": "",
+                                            "display_value": 1.1,
+                                            "hc": "ru-ad",
+                                            "id": null,
+                                            "labelrank": null,
+                                            "middleX": 0.5,
+                                            "middleY": 0.5,
+                                            "name": "\u0410\u0434\u044b\u0433\u0435\u044f",
+                                            "name_ru": "\u0410\u0434\u044b\u0433\u0435\u044f",
+                                            "unit": "%",
+                                            "value": 0.011000000000000001
+                                        }, {
+                                            "color": null,
+                                            "dataLabels": null,
+                                            "display_suffix": "",
+                                            "display_value": 1.58,
+                                            "hc": "ru-ar",
+                                            "id": null,
+                                            "labelrank": null,
+                                            "middleX": 0.5,
+                                            "middleY": 0.5,
+                                            "name": "\u0410\u0440\u0445\u0430\u043d\u0433\u0435\u043b\u044c\u0441\u043a\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+                                            "name_ru": "\u0410\u0440\u0445\u0430\u043d\u0433\u0435\u043b\u044c\u0441\u043a\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+                                            "unit": "%",
+                                            "value": 0.0158
+                                        }, {
+                                            "color": null,
+                                            "dataLabels": null,
+                                            "display_suffix": "",
+                                            "display_value": 3.19,
+                                            "hc": "ru-bu",
+                                            "id": null,
+                                            "labelrank": null,
+                                            "middleX": 0.5,
+                                            "middleY": 0.5,
+                                            "name": "\u0411\u0443\u0440\u044f\u0442\u0438\u044f",
+                                            "name_ru": "\u0411\u0443\u0440\u044f\u0442\u0438\u044f",
+                                            "unit": "%",
+                                            "value": 0.0319
+                                        }, {
+                                            "color": null,
+                                            "dataLabels": null,
+                                            "display_suffix": "",
+                                            "display_value": 1.09,
+                                            "hc": "ru-vo",
+                                            "id": null,
+                                            "labelrank": null,
+                                            "middleX": 0.5,
+                                            "middleY": 0.5,
+                                            "name": "\u0412\u043e\u043b\u043e\u0433\u043e\u0434\u0441\u043a\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+                                            "name_ru": "\u0412\u043e\u043b\u043e\u0433\u043e\u0434\u0441\u043a\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+                                            "unit": "%",
+                                            "value": 0.0109
+                                        }, {
+                                            "color": null,
+                                            "dataLabels": null,
+                                            "display_suffix": "",
+                                            "display_value": 2.26,
+                                            "hc": "ru-kn",
+                                            "id": null,
+                                            "labelrank": null,
+                                            "middleX": 0.5,
+                                            "middleY": 0.5,
+                                            "name": "\u041a\u0430\u043b\u0438\u043d\u0438\u043d\u0433\u0440\u0430\u0434\u0441\u043a\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+                                            "name_ru": "\u041a\u0430\u043b\u0438\u043d\u0438\u043d\u0433\u0440\u0430\u0434\u0441\u043a\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+                                            "unit": "%",
+                                            "value": 0.0226
+                                        }, {
+                                            "color": null,
+                                            "dataLabels": null,
+                                            "display_suffix": "",
+                                            "display_value": 1.76,
+                                            "hc": "ru-kl",
+                                            "id": null,
+                                            "labelrank": null,
+                                            "middleX": 0.5,
+                                            "middleY": 0.5,
+                                            "name": "\u041a\u0430\u043b\u043c\u044b\u043a\u0438\u044f",
+                                            "name_ru": "\u041a\u0430\u043b\u043c\u044b\u043a\u0438\u044f",
+                                            "unit": "%",
+                                            "value": 0.0176
+                                        }, {
+                                            "color": null,
+                                            "dataLabels": null,
+                                            "display_suffix": "",
+                                            "display_value": 1.36,
+                                            "hc": "ru-ks",
+                                            "id": null,
+                                            "labelrank": null,
+                                            "middleX": 0.5,
+                                            "middleY": 0.5,
+                                            "name": "\u041a\u0443\u0440\u0441\u043a\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+                                            "name_ru": "\u041a\u0443\u0440\u0441\u043a\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+                                            "unit": "%",
+                                            "value": 0.013600000000000001
+                                        }, {
+                                            "color": null,
+                                            "dataLabels": null,
+                                            "display_suffix": "",
+                                            "display_value": 0.61,
+                                            "hc": "ru-ms",
+                                            "id": null,
+                                            "labelrank": null,
+                                            "middleX": 0.5,
+                                            "middleY": 0.5,
+                                            "name": "\u041c\u043e\u0441\u043a\u0432\u0430",
+                                            "name_ru": "\u041c\u043e\u0441\u043a\u0432\u0430",
+                                            "unit": "%",
+                                            "value": 0.0060999999999999995
+                                        }, {
+                                            "color": null,
+                                            "dataLabels": null,
+                                            "display_suffix": "",
+                                            "display_value": 0.55,
+                                            "hc": "ru-mm",
+                                            "id": null,
+                                            "labelrank": null,
+                                            "middleX": 0.5,
+                                            "middleY": 0.5,
+                                            "name": "\u041c\u0443\u0440\u043c\u0430\u043d\u0441\u043a\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+                                            "name_ru": "\u041c\u0443\u0440\u043c\u0430\u043d\u0441\u043a\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+                                            "unit": "%",
+                                            "value": 0.0055000000000000005
+                                        }, {
+                                            "color": null,
+                                            "dataLabels": null,
+                                            "display_suffix": "",
+                                            "display_value": 1.12,
+                                            "hc": "ru-nz",
+                                            "id": null,
+                                            "labelrank": null,
+                                            "middleX": 0.5,
+                                            "middleY": 0.5,
+                                            "name": "\u041d\u0438\u0436\u0435\u0433\u043e\u0440\u043e\u0434\u0441\u043a\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+                                            "name_ru": "\u041d\u0438\u0436\u0435\u0433\u043e\u0440\u043e\u0434\u0441\u043a\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+                                            "unit": "%",
+                                            "value": 0.011200000000000002
+                                        }, {
+                                            "color": null,
+                                            "dataLabels": null,
+                                            "display_suffix": "",
+                                            "display_value": 0.79,
+                                            "hc": "ru-om",
+                                            "id": null,
+                                            "labelrank": null,
+                                            "middleX": 0.5,
+                                            "middleY": 0.5,
+                                            "name": "\u041e\u043c\u0441\u043a\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+                                            "name_ru": "\u041e\u043c\u0441\u043a\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+                                            "unit": "%",
+                                            "value": 0.0079
+                                        }, {
+                                            "color": null,
+                                            "dataLabels": null,
+                                            "display_suffix": "",
+                                            "display_value": 1.76,
+                                            "hc": "ru-pr",
+                                            "id": null,
+                                            "labelrank": null,
+                                            "middleX": 0.5,
+                                            "middleY": 0.5,
+                                            "name": "\u041f\u0440\u0438\u043c\u043e\u0440\u0441\u043a\u0438\u0439 \u043a\u0440\u0430\u0439",
+                                            "name_ru": "\u041f\u0440\u0438\u043c\u043e\u0440\u0441\u043a\u0438\u0439 \u043a\u0440\u0430\u0439",
+                                            "unit": "%",
+                                            "value": 0.0176
+                                        }, {
+                                            "color": null,
+                                            "dataLabels": null,
+                                            "display_suffix": "",
+                                            "display_value": 3.08,
+                                            "hc": "ru-rz",
+                                            "id": null,
+                                            "labelrank": null,
+                                            "middleX": 0.5,
+                                            "middleY": 0.5,
+                                            "name": "\u0420\u044f\u0437\u0430\u043d\u0441\u043a\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+                                            "name_ru": "\u0420\u044f\u0437\u0430\u043d\u0441\u043a\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+                                            "unit": "%",
+                                            "value": 0.0308
+                                        }, {
+                                            "color": null,
+                                            "dataLabels": null,
+                                            "display_suffix": "",
+                                            "display_value": 1.2,
+                                            "hc": "ru-sr",
+                                            "id": null,
+                                            "labelrank": null,
+                                            "middleX": 0.5,
+                                            "middleY": 0.5,
+                                            "name": "\u0421\u0430\u0440\u0430\u0442\u043e\u0432\u0441\u043a\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+                                            "name_ru": "\u0421\u0430\u0440\u0430\u0442\u043e\u0432\u0441\u043a\u0430\u044f \u043e\u0431\u043b\u0430\u0441\u0442\u044c",
+                                            "unit": "%",
+                                            "value": 0.012
+                                        }, {
+                                            "color": null,
+                                            "dataLabels": null,
+                                            "display_suffix": "",
+                                            "display_value": 2.02,
+                                            "hc": "ru-ck",
+                                            "id": null,
+                                            "labelrank": null,
+                                            "middleX": 0.5,
+                                            "middleY": 0.5,
+                                            "name": "\u0421\u0430\u0445\u0430 /\u042f\u043a\u0443\u0442\u0438\u044f/",
+                                            "name_ru": "\u0421\u0430\u0445\u0430 /\u042f\u043a\u0443\u0442\u0438\u044f/",
+                                            "unit": "%",
+                                            "value": 0.0202
+                                        }, {
+                                            "color": null,
+                                            "dataLabels": null,
+                                            "display_suffix": "",
+                                            "display_value": 3.16,
+                                            "hc": "ru-sc",
+                                            "id": null,
+                                            "labelrank": null,
+                                            "middleX": 0.5,
+                                            "middleY": 0.5,
+                                            "name": "\u0421\u0435\u0432\u0430\u0441\u0442\u043e\u043f\u043e\u043b\u044c",
+                                            "name_ru": "\u0421\u0435\u0432\u0430\u0441\u0442\u043e\u043f\u043e\u043b\u044c",
+                                            "unit": "%",
+                                            "value": 0.0316
+                                        }, {
+                                            "color": null,
+                                            "dataLabels": null,
+                                            "display_suffix": "",
+                                            "display_value": 0.68,
+                                            "hc": "ru-yn",
+                                            "id": null,
+                                            "labelrank": null,
+                                            "middleX": 0.5,
+                                            "middleY": 0.5,
+                                            "name": "\u042f\u043c\u0430\u043b\u043e-\u041d\u0435\u043d\u0435\u0446\u043a\u0438\u0439 \u0430\u0432\u0442\u043e\u043d\u043e\u043c\u043d\u044b\u0439 \u043e\u043a\u0440\u0443\u0433",
+                                            "name_ru": "\u042f\u043c\u0430\u043b\u043e-\u041d\u0435\u043d\u0435\u0446\u043a\u0438\u0439 \u0430\u0432\u0442\u043e\u043d\u043e\u043c\u043d\u044b\u0439 \u043e\u043a\u0440\u0443\u0433",
+                                            "unit": "%",
+                                            "value": 0.0068000000000000005
+                                        }],
+                                        "dataLabels": {"enabled": true, "format": "{point.name_ru}"},
+                                        "name": "\u0414\u043e\u043b\u044f \u043c\u043e\u0431\u0438\u043b\u0438\u0437\u043e\u0432\u0430\u043d\u043d\u044b\u0445",
+                                        "nullColor": "black"
+                                    }, {
+                                        "color": "orange",
+                                        "data": [{
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {"coordinates": [42.0288513, 50.7903789], "type": "Point"},
+                                            "name": "\u0423\u0440\u044e\u043f\u0438\u043d\u0441\u043a",
+                                            "name_ru": "\u0423\u0440\u044e\u043f\u0438\u043d\u0441\u043a",
+                                            "unit": ""
+                                        }, {
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {"coordinates": [128.1219729, 51.3614103], "type": "Point"},
+                                            "name": "\u0421\u0432\u043e\u0431\u043e\u0434\u043d\u044b\u0439",
+                                            "name_ru": "\u0421\u0432\u043e\u0431\u043e\u0434\u043d\u044b\u0439",
+                                            "unit": ""
+                                        }, {
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {"coordinates": [135.0598942, 48.4647258], "type": "Point"},
+                                            "name": "\u0425\u0430\u0431\u0430\u0440\u043e\u0432\u0441\u043a",
+                                            "name_ru": "\u0425\u0430\u0431\u0430\u0440\u043e\u0432\u0441\u043a",
+                                            "unit": ""
+                                        }, {
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {"coordinates": [45.3844202, 50.0651529], "type": "Point"},
+                                            "name": "\u041a\u0430\u043c\u044b\u0448\u0438\u043d",
+                                            "name_ru": "\u041a\u0430\u043c\u044b\u0448\u0438\u043d",
+                                            "unit": ""
+                                        }, {
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {
+                                                "coordinates": [85.65981876585029, 53.0760974834138],
+                                                "type": "Point"
+                                            },
+                                            "name": "\u0426\u0435\u043b\u0438\u043d\u043d\u043e\u0435",
+                                            "name_ru": "\u0426\u0435\u043b\u0438\u043d\u043d\u043e\u0435",
+                                            "unit": ""
+                                        }, {
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {"coordinates": [49.3894028, 53.5205348], "type": "Point"},
+                                            "name": "\u0422\u043e\u043b\u044c\u044f\u0442\u0442\u0438",
+                                            "name_ru": "\u0422\u043e\u043b\u044c\u044f\u0442\u0442\u0438",
+                                            "unit": ""
+                                        }, {
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {"coordinates": [30.3159004, 59.9391313], "type": "Point"},
+                                            "name": "\u0421\u0430\u043d\u043a\u0442-\u041f\u0435\u0442\u0435\u0440\u0431\u0443\u0440\u0433",
+                                            "name_ru": "\u0421\u0430\u043d\u043a\u0442-\u041f\u0435\u0442\u0435\u0440\u0431\u0443\u0440\u0433",
+                                            "unit": ""
+                                        }, {
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {"coordinates": [58.4436875, 51.4649189], "type": "Point"},
+                                            "name": "\u0413\u0430\u0439",
+                                            "name_ru": "\u0413\u0430\u0439",
+                                            "unit": ""
+                                        }, {
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {"coordinates": [44.0053913, 56.3240627], "type": "Point"},
+                                            "name": "\u041d\u0438\u0436\u043d\u0438\u0439 \u041d\u043e\u0432\u0433\u043e\u0440\u043e\u0434",
+                                            "name_ru": "\u041d\u0438\u0436\u043d\u0438\u0439 \u041d\u043e\u0432\u0433\u043e\u0440\u043e\u0434",
+                                            "unit": ""
+                                        }, {
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {"coordinates": [102.7415734, 57.9430504], "type": "Point"},
+                                            "name": "\u0423\u0441\u0442\u044c-\u0418\u043b\u0438\u043c\u0441\u043a",
+                                            "name_ru": "\u0423\u0441\u0442\u044c-\u0418\u043b\u0438\u043c\u0441\u043a",
+                                            "unit": ""
+                                        }, {
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {"coordinates": [95.7051096, 56.2051282], "type": "Point"},
+                                            "name": "\u041a\u0430\u043d\u0441\u043a",
+                                            "name_ru": "\u041a\u0430\u043d\u0441\u043a",
+                                            "unit": ""
+                                        }, {
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {
+                                                "coordinates": [111.97329901583738, 49.577755881608944],
+                                                "type": "Point"
+                                            },
+                                            "name": "\u041a\u044b\u0440\u0430",
+                                            "name_ru": "\u041a\u044b\u0440\u0430",
+                                            "unit": ""
+                                        }, {
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {"coordinates": [21.7969062, 54.6244751], "type": "Point"},
+                                            "name": "\u0427\u0435\u0440\u043d\u044f\u0445\u043e\u0432\u0441\u043a",
+                                            "name_ru": "\u0427\u0435\u0440\u043d\u044f\u0445\u043e\u0432\u0441\u043a",
+                                            "unit": ""
+                                        }, {
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {"coordinates": [44.9490466, 54.0581967], "type": "Point"},
+                                            "name": "\u0420\u0443\u0437\u0430\u0435\u0432\u043a\u0430",
+                                            "name_ru": "\u0420\u0443\u0437\u0430\u0435\u0432\u043a\u0430",
+                                            "unit": ""
+                                        }, {
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {"coordinates": [33.663735, 67.6150424], "type": "Point"},
+                                            "name": "\u041a\u0438\u0440\u043e\u0432\u0441\u043a",
+                                            "name_ru": "\u041a\u0438\u0440\u043e\u0432\u0441\u043a",
+                                            "unit": ""
+                                        }, {
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {"coordinates": [131.8823937, 43.1164904], "type": "Point"},
+                                            "name": "\u0412\u043b\u0430\u0434\u0438\u0432\u043e\u0441\u0442\u043e\u043a",
+                                            "name_ru": "\u0412\u043b\u0430\u0434\u0438\u0432\u043e\u0441\u0442\u043e\u043a",
+                                            "unit": ""
+                                        }, {
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {"coordinates": [82.9211489, 55.028191], "type": "Point"},
+                                            "name": "\u041d\u043e\u0432\u043e\u0441\u0438\u0431\u0438\u0440\u0441\u043a",
+                                            "name_ru": "\u041d\u043e\u0432\u043e\u0441\u0438\u0431\u0438\u0440\u0441\u043a",
+                                            "unit": ""
+                                        }, {
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {
+                                                "coordinates": [44.06031587260724, 48.62028958327386],
+                                                "type": "Point"
+                                            },
+                                            "name": "\u0411\u0435\u0440\u0435\u0441\u043b\u0430\u0432\u043a\u0430",
+                                            "name_ru": "\u0411\u0435\u0440\u0435\u0441\u043b\u0430\u0432\u043a\u0430",
+                                            "unit": ""
+                                        }, {
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {
+                                                "coordinates": [29.84942768746351, 59.55336095646377],
+                                                "type": "Point"
+                                            },
+                                            "name": "\u0421\u044f\u0441\u044c\u043a\u0435\u043b\u0435\u0432\u0441\u043a\u043e\u0435 \u0441\u0435\u043b\u044c\u0441\u043a\u043e\u0435 \u043f\u043e\u0441\u0435\u043b\u0435\u043d\u0438\u0435",
+                                            "name_ru": "\u0421\u044f\u0441\u044c\u043a\u0435\u043b\u0435\u0432\u0441\u043a\u043e\u0435 \u0441\u0435\u043b\u044c\u0441\u043a\u043e\u0435 \u043f\u043e\u0441\u0435\u043b\u0435\u043d\u0438\u0435",
+                                            "unit": ""
+                                        }, {
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {"coordinates": [55.9245224, 53.3616974], "type": "Point"},
+                                            "name": "\u0421\u0430\u043b\u0430\u0432\u0430\u0442",
+                                            "name_ru": "\u0421\u0430\u043b\u0430\u0432\u0430\u0442",
+                                            "unit": ""
+                                        }, {
+                                            "display_suffix": "",
+                                            "display_value": null,
+                                            "geometry": {
+                                                "coordinates": [42.46810748201363, 47.14164324841204],
+                                                "type": "Point"
+                                            },
+                                            "name": "\u0417\u0438\u043c\u043e\u0432\u043d\u0438\u043a\u043e\u0432\u0441\u043a\u043e\u0435 \u0441\u0435\u043b\u044c\u0441\u043a\u043e\u0435 \u043f\u043e\u0441\u0435\u043b\u0435\u043d\u0438\u0435",
+                                            "name_ru": "\u0417\u0438\u043c\u043e\u0432\u043d\u0438\u043a\u043e\u0432\u0441\u043a\u043e\u0435 \u0441\u0435\u043b\u044c\u0441\u043a\u043e\u0435 \u043f\u043e\u0441\u0435\u043b\u0435\u043d\u0438\u0435",
+                                            "unit": ""
+                                        }],
+                                        "name": "\u041f\u043e\u0434\u0436\u043e\u0433\u0438",
+                                        "showInLegend": true,
+                                        "type": "mappoint",
+                                        marker: {
+            symbol: 'url(https://www.highcharts.com/samples/graphics/sun.png)'
+        }
+                                    }],
+                                    "title": {"text": null}
+                                });
+
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Sales Chart End -->
+
+        <!-- Sale & Revenue Start -->
+        <div class="container-fluid pt-4 px-4">
+            <div class="row g-4">
+                <div class="col-sm-4 col-xl-4">
+                    <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                        <i class="fa fa-skull fa-3x text-primary"></i>
+                        <div class="ms-3">
+                            <p class="mb-2">Уже мобилизовано:</p>
+                            <h6 class="mb-0">12 тысяч человек</h6>
+                            <!--                                                                <p class="mb-2">по прогнозу</p>-->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-xl-4">
+                    <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                        <i class="fa fa-plane fa-3x text-primary"></i>
+                        <div class="ms-3">
+                            <p class="mb-2">Женщин мобилизовано:</p>
+                            <h6 class="mb-0">250</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-xl-4">
+                    <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                        <i class="fa fa-skull fa-3x text-primary"></i>
+                        <div class="ms-3">
+                            <p class="mb-2">Женщин мобилизовано:</p>
+                            <h6 class="mb-0">250</h6>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <!-- Sale & Revenue End -->
+
+
+        <!-- Footer Start -->
+        <div class="container-fluid pt-4 px-4">
+            <div class="bg-secondary rounded-top p-4">
+                <div class="row">
+                    <div class="col-12 col-sm-6 text-center text-sm-start">
+
+                    </div>
+                    <div class="col-12 col-sm-6 text-center text-sm-end">
+                        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                        <a href="https://htmlcodex.com">Новости о мобилизации</a>
+                        <br>
+                        <a href="https://themewagon.com" target="_blank">Юридическая помощь</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End -->
+    </div>
+    <!-- Content End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+</div>
+
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="lib/chart/chart.min.js"></script>
+<script src="lib/easing/easing.min.js"></script>
+<script src="lib/waypoints/waypoints.min.js"></script>
+<script src="lib/owlcarousel/owl.carousel.min.js"></script>
+<script src="lib/tempusdominus/js/moment.min.js"></script>
+<script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+<script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+<!-- Template Javascript -->
+<script src="js/main.js"></script>
+</body>
+
+</html>
